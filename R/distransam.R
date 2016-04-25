@@ -1,6 +1,6 @@
 library(dplyr)
 
-distransam <- function(x, grouping_var, sample_var = NULL, N){
+distransam <- function(x, grouping_var, sample_var = NULL, max_N = NULL){
   
   # case where we want to randomly sample only across groups (no plates/sites to worry about)
   if (is.null(sample_var)) {
