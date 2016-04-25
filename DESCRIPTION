@@ -1,9 +1,13 @@
 Package: distransam
-Title: What the Package Does (one line, title case)
+Title: Creates random samples with equal N's across different sample groups
 Version: 0.0.0.9000
-Authors@R: person("First", "Last", email = "first.last@example.com", role = c("aut", "cre"))
-Description: What the package does (one paragraph).
-Depends: R (>= 3.2.3)
-License: What license is it under?
+Authors@R: person("Tiffany", "Timbers", email = "tiffany.timbers@gmail.com", role = c("aut", "cre"))
+Description: Takes a data frame, and returns one with equal N's for each group. For 
+unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly
+selects that number of samples from each group. A single sub-groups can be specified, as 
+can a maximum N value. The returned object is a dataframe, with all the same original columns
+as the original data frame.
+Depends: R (>= 3.2.3), dplyr (>= 0.4.3)
+License: MIT + file LICENSE
 LazyData: true
 Suggests: testthat
