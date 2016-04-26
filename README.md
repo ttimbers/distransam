@@ -34,17 +34,17 @@ library(dplyr)
 #> 
 #>     intersect, setdiff, setequal, union
 distransam(gap92, 'continent')
-#>        country continent year lifeExp      pop  gdpPercap
-#> 1       Malawi    Africa 1992  49.420 10014249   563.2000
-#> 2     Ethiopia    Africa 1992  48.091 52088559   421.3535
-#> 3    Argentina  Americas 1992  71.868 33958947  9308.4187
-#> 4    Venezuela  Americas 1992  71.150 20265563 10733.9263
-#> 5    Singapore      Asia 1992  75.788  3235865 24769.8912
-#> 6     Mongolia      Asia 1992  61.271  2312802  1785.4020
-#> 7      Romania    Europe 1992  69.360 22797027  6598.4099
-#> 8  Netherlands    Europe 1992  77.420 15174244 26790.9496
-#> 9  New Zealand   Oceania 1992  76.330  3437674 18363.3249
-#> 10   Australia   Oceania 1992  77.560 17481977 23424.7668
+#>             country continent year lifeExp      pop gdpPercap
+#> 1            Malawi    Africa 1992  49.420 10014249   563.200
+#> 2         Mauritius    Africa 1992  69.745  1096202  6058.254
+#> 3            Panama  Americas 1992  72.462  2484997  6618.743
+#> 4          Honduras  Americas 1992  66.399  5077347  3081.695
+#> 5         Sri Lanka      Asia 1992  70.379 17587060  2153.739
+#> 6  Hong Kong, China      Asia 1992  77.601  5829696 24757.603
+#> 7           Albania    Europe 1992  71.581  3326498  2497.438
+#> 8       Switzerland    Europe 1992  78.030  6995447 31871.530
+#> 9       New Zealand   Oceania 1992  76.330  3437674 18363.325
+#> 10        Australia   Oceania 1992  77.560 17481977 23424.767
 ```
 
 Another example of where this could be used, is if you had two groupings that you wanted equal random samples from, for example, if you want random samples of equal size from each plate for each strain
@@ -57,31 +57,31 @@ colnames(worm_data) <- c('strain', 'plate', 'measurement')
 #view data frame
 worm_data
 #>    strain plate measurement
-#> 1      N2     a           9
-#> 2      N2     a           9
-#> 3      N2     b           9
-#> 4      N2     b          10
-#> 5      N2     b           5
+#> 1      N2     a           7
+#> 2      N2     a          10
+#> 3      N2     b           7
+#> 4      N2     b           9
+#> 5      N2     b          10
 #> 6     CB1     a           8
 #> 7     CB1     a           8
-#> 8     CB1     a           5
-#> 9     CB1     a           9
-#> 10    CB1     b           8
-#> 11    CB1     b           8
-#> 12    CB1     b           8
+#> 8     CB1     a          10
+#> 9     CB1     a           7
+#> 10    CB1     b           9
+#> 11    CB1     b           5
+#> 12    CB1     b           6
 ```
 
-Use distransam to get a new, randomly sampled dataframe where N's are equal:
+Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
 
 ``` r
 distransam(worm_data, 'strain', 'plate')
 #>   strain plate measurement
-#> 1    CB1     a           9
-#> 2    CB1     a           8
-#> 3    CB1     b           8
-#> 4    CB1     b           8
-#> 5     N2     a           9
-#> 6     N2     a           9
-#> 7     N2     b           9
-#> 8     N2     b           5
+#> 1    CB1     a           8
+#> 2    CB1     a           7
+#> 3    CB1     b           5
+#> 4    CB1     b           9
+#> 5     N2     a           7
+#> 6     N2     a          10
+#> 7     N2     b           7
+#> 8     N2     b          10
 ```

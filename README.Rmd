@@ -54,7 +54,7 @@ colnames(worm_data) <- c('strain', 'plate', 'measurement')
 worm_data
 ```
 
-Use distransam to get a new, randomly sampled dataframe where N's are equal:
+Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
 
 ```{r}
 distransam(worm_data, 'strain', 'plate')
