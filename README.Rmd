@@ -42,3 +42,20 @@ library(distransam)
 library(dplyr)
 distransam(gap92, 'continent')
 ```
+
+Another example of where this could be used, is if you had two groupings that you wanted equal random samples from, for example, if you want random samples of equal size from each plate for each strain
+
+```{r}
+# make a data frame with worm strain, Petri plate ID, and a measurement
+worm_data <- data.frame(c(rep("N2", 5), rep("CB1", 7)), c(rep('a', 2), rep('b', 3), rep('a', 4), rep('b',3)), sample(5:10, 12, replace = TRUE))
+colnames(worm_data) <- c('strain', 'plate', 'measurement')
+
+#view data frame
+worm_data
+```
+
+Use distransam to get a new, randomly sampled dataframe where N's are equal:
+
+```{r}
+distransam(worm_data, 'strain', 'plate')
+```
