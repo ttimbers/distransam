@@ -13,3 +13,32 @@ knitr::opts_chunk$set(
   fig.path = "README-"
 )
 ```
+
+### distransam
+
+Randomly samples groups to get equal N's. Takes a data frame, and returns one with equal N's for each group. For unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly selects that number of samples from each group. A single sub-groups can be specified, as can a maximum N value. The returned object is a dataframe, with all the same original columns as the original data frame.
+
+note - that because this package uses dplyr & `%>%` both distransam & dplyr libraries must be loaded
+
+### Installation
+
+```{r installation, eval = FALSE}
+devtools::install_github("ttimbers/distransam")
+```
+  
+### Quick demo
+
+Using a subset of the gapminder dataset
+
+```{r}
+library(gapminder)
+gap92 <- gapminder[gapminder$year == 1992,]
+```
+
+Lets randomly sample the gap92 dataframe for countries from each continent, but in doing so, ensure that we get an equal sample size for each continent. 
+
+```{r}
+library(distransam)
+library(dplyr)
+distransam(gap92, 'continent')
+```
