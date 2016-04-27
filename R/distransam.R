@@ -55,7 +55,7 @@ distransam <- function(x, grouping_var, sample_var = NULL, max_N = NULL){
 #' @export
 #'
 #' @examples
-#' 
+#' distransam_series(gapminder, 'continent', 'country', 'year')
 distransam_series <- function(x, grouping_var, subgroup_var = NULL, series_var){
   
   # case where we want to randomly sample only across groups (no plates/sites to worry about)
