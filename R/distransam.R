@@ -48,52 +48,92 @@ distransam <- function(x, grouping_var, sample_var = NULL, max_N = NULL){
 #' Randomly samples groups that have series data to get equal N's
 #'
 #' @param x
-#' @param grouping_var
-#' @param series_var
+#' @param group
+#' @param site
+#' @param ID
+#' @param series
 #'
 #' @return dataframe
 #' @export
 #'
 #' @examples
-#' distransam_series(gapminder, 'continent', 'country', 'year')
-distransam_series <- function(x, grouping_var, subgroup_var = NULL, series_var){
+#' distransam_series(worm_data_time_series, 'strain', 'plate', 'ID', 'time')
+distransam_series <- function(x, group, site, ID, series){
 
-  # case where we want to randomly sample only across groups (no plates/sites to worry about)
-  if (is.null(subgroup_var)) {
+  # get the minimum number of IDs from each site/plate
+  x_counts <- x %>% dplyr::group_by_(site, ID) %>% dplyr::summarise(n()) %>% dplyr::group_by_(site) %>% dplyr::summarise(n())
+  min_IDs <- min(x_counts$`n()`)
 
-    # get the minimum sample size of each group
-    x_counts <- x %>% dplyr::group_by_(grouping_var, series_var) %>% dplyr::summarise(n())
-    min_sample <- min(x_counts$`n()`)
+  # get the minimum number of sites/plates from each group
+  x_counts <- x %>% dplyr::group_by_(group, site) %>% dplyr::summarise(n()) %>% dplyr::group_by_(group) %>% dplyr::summarise(n())
+  min_sites <- min(x_counts$`n()`)
 
-    # sample the minimum number of samples from each group, but get all the series
-    # data for that sample
+  # decide which IDs to sample (use unique combination of group, site & ID)
+  # grab only the first N = min_sites from each group
+  samples <- x %>% dplyr::group_by_(group, site, ID) %>% dplyr::slice(1)
 
-    # decide which series to sample
-    samples <- data.frame(x_counts%>% dplyr::group_by_(grouping_var) %>% dplyr::sample_n(size = min_sample))
+  #get random samples of size min_ID, per site
+  random_samples <- samples %>% dplyr::group_by_(group, site) %>% dplyr::sample_n(size = min_IDs)
 
-    # get the randomly sample dataframe for that series
-    randomly_sampled_dataframe <- x[x$ID %in% samples$ID,]
+  #get random sites of size min sites, per group
+  random_sites <- random_samples %>% dplyr::group_by_(group, site) %>% dplyr::slice(1) %>% dplyr::group_by_(group) %>% dplyr::sample_n(size = min_sites)
+  random_sites <- random_sites[,1:2]
 
-    # grab N random sample from unique combinations of factors in grouping_var & sample_var column
-  } else {
+  # get only random samples for random sites
+  random_samples_from_random_sites <- dplyr::inner_join(random_samples, random_sites)
+  random_samples_from_random_sites <- random_samples_from_random_sites[,1:3]
 
-    # get the minimum sample size of each group
-    x_counts <- x %>% dplyr::group_by_(grouping_var, subgroup_var) %>% dplyr::summarise(n())
-    x_counts_counts <- x_counts %>% dplyr::group_by_(grouping_var) %>% dplyr::summarise(n())
-    min_sample <- min(x_counts_counts$`n()`)
 
-    # sample the minimum number of samples from each group, but get all the series
-    # data for that sample
-
-    # decide which series to sample
-    samples <- x %>% dplyr::group_by_(grouping_var) %>% dplyr::group_by_(subgroup_var) %>%  dplyr::slice(1)
-
-    random_samples <- samples %>% dplyr::group_by_(grouping_var) %>% dplyr::sample_n(size = min_sample)
-
-    # get the randomly sample dataframe for that series
-    #randomly_sampled_dataframe <- x[x$country %in% samples$country,]
-    randomly_sampled_dataframe <- x[x[[subgroup_var]] %in% random_samples[[subgroup_var]],]
-  }
+  # get the randomly sample dataframe for that series
+  randomly_sampled_dataframe <- inner_join(x, random_samples_from_random_sites)
 
   return(randomly_sampled_dataframe)
 }
+
+
+
+# distransam_series <- function(x, site_var, subgroup_var = NULL, series_var){
+#
+#   # case where we want to randomly sample only across groups (no plates/sites to worry about)
+#   if (is.null(subgroup_var)) {
+#
+#     # get the minimum sample size of each group
+#     x_counts <- x %>% dplyr::group_by_(grouping_var, series_var) %>% dplyr::summarise(n())
+#     min_sample <- min(x_counts$`n()`)
+#
+#     # sample the minimum number of samples from each group, but get all the series
+#     # data for that sample
+#
+#     # decide which series to sample
+#     samples <- data.frame(x_counts%>% dplyr::group_by_(grouping_var) %>% dplyr::sample_n(size = min_sample))
+#
+#     # get the randomly sample dataframe for that series
+#     randomly_sampled_dataframe <- x[x$ID %in% samples$ID,]
+#
+#     # grab N random sample from unique combinations of factors in grouping_var & sample_var column
+#   } else {
+#
+#     # get the minimum sample size of each group
+#     x_counts <- x %>% dplyr::group_by_(grouping_var, subgroup_var) %>% dplyr::summarise(n())
+#     x_counts_counts <- x_counts %>% dplyr::group_by_(grouping_var) %>% dplyr::summarise(n())
+#     min_sample <- min(x_counts_counts$`n()`)
+#
+#     # sample the minimum number of samples from each group, but get all the series
+#     # data for that sample
+#
+#     # decide which series to sample
+#     samples <- x %>% dplyr::group_by_(grouping_var) %>% dplyr::group_by_(subgroup_var) %>%  dplyr::slice(1)
+#
+#     random_samples <- samples %>% dplyr::group_by_(grouping_var) %>% dplyr::sample_n(size = min_sample)
+#
+#     # get the randomly sample dataframe for that series
+#     #randomly_sampled_dataframe <- x[x$country %in% samples$country,]
+#     randomly_sampled_dataframe <- x[x[[subgroup_var]] %in% random_samples[[subgroup_var]],]
+#   }
+#
+#  return(randomly_sampled_dataframe)
+#}
+
+
+
+
