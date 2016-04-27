@@ -43,4 +43,23 @@ distransam <- function(x, grouping_var, sample_var = NULL, max_N = NULL){
   return(randomly_sampled_dataframe)
 }
   
+
+
+distransam_series <- function(x, grouping_var, series_var){
+  
+  # get the minimum sample size of each group
+  x_counts <- x %>% dplyr::group_by_(grouping_var, series_var) %>% dplyr::summarise(n())
+  min_sample <- min(x_counts$`n()`)
+  
+  # sample the minimum number of samples from each group, but get all the series 
+  # data for that sample
+  
+  # decide which series to sample
+  samples <- data.frame(x_counts%>% dplyr::group_by_(grouping_var) %>% dplyr::sample_n(size = min_sample))
+  
+  # get the randomly sample dataframe for that series
+  randomly_sampled_dataframe <- x[x$ID %in% samples$ID,]
+  
+  return(randomly_sampled_dataframe)
+}
   
