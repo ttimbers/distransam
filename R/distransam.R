@@ -27,7 +27,7 @@ distransam <- function(x, grouping_var, sample_var = NULL, max_N = NULL){
     randomly_sampled_dataframe <- data.frame(dplyr::group_by_(x, grouping_var) %>% dplyr::sample_n(size = min_sample))
 
   # case where we want to randomly sample only across groups, and we want to spread these
-  # equally across the sample variable (e.g., plates)
+  # equally across the sample variable (e.g., plates).
   } else{
   # grab N random sample from unique combinations of factors in grouping_var & sample_var column
 

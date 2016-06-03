@@ -1,4 +1,7 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
+code is a work in process - which is not yet working correctly
+--------------------------------------------------------------
+
 ### distransam
 
 Randomly samples groups to get equal N's. Takes a data frame, and returns one with equal N's for each group. For unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly selects that number of samples from each group. A single sub-groups can be specified, as can a maximum N value. The returned object is a dataframe, with all the same original columns as the original data frame.
@@ -24,7 +27,7 @@ Lets randomly sample the gap92 dataframe for countries from each continent, but 
 
 ``` r
 library(distransam)
-library(dplyr)
+#> Loading required package: dplyr
 #> 
 #> Attaching package: 'dplyr'
 #> The following objects are masked from 'package:stats':
@@ -33,18 +36,19 @@ library(dplyr)
 #> The following objects are masked from 'package:base':
 #> 
 #>     intersect, setdiff, setequal, union
+library(dplyr)
 distransam(gap92, 'continent')
-#>             country continent year lifeExp      pop gdpPercap
-#> 1            Malawi    Africa 1992  49.420 10014249   563.200
-#> 2         Mauritius    Africa 1992  69.745  1096202  6058.254
-#> 3            Panama  Americas 1992  72.462  2484997  6618.743
-#> 4          Honduras  Americas 1992  66.399  5077347  3081.695
-#> 5         Sri Lanka      Asia 1992  70.379 17587060  2153.739
-#> 6  Hong Kong, China      Asia 1992  77.601  5829696 24757.603
-#> 7           Albania    Europe 1992  71.581  3326498  2497.438
-#> 8       Switzerland    Europe 1992  78.030  6995447 31871.530
-#> 9       New Zealand   Oceania 1992  76.330  3437674 18363.325
-#> 10        Australia   Oceania 1992  77.560 17481977 23424.767
+#>                  country continent year lifeExp       pop  gdpPercap
+#> 1                 Uganda    Africa 1992  48.825  18252190   644.1708
+#> 2  Sao Tome and Principe    Africa 1992  62.742    125911  1428.7778
+#> 3                Bolivia  Americas 1992  59.957   6893451  2961.6997
+#> 4                  Haiti  Americas 1992  55.089   6326682  1456.3095
+#> 5               Pakistan      Asia 1992  60.838 120065004  1971.8295
+#> 6               Cambodia      Asia 1992  55.803  10150094   682.3032
+#> 7                 Norway    Europe 1992  77.320   4286357 33965.6611
+#> 8             Montenegro    Europe 1992  75.435    621621  7003.3390
+#> 9              Australia   Oceania 1992  77.560  17481977 23424.7668
+#> 10           New Zealand   Oceania 1992  76.330   3437674 18363.3249
 ```
 
 Another example of where this could be used, is if you had two groupings that you wanted equal random samples from, for example, if you want random samples of equal size from each plate for each strain
@@ -57,18 +61,18 @@ colnames(worm_data) <- c('strain', 'plate', 'measurement')
 #view data frame
 worm_data
 #>    strain plate measurement
-#> 1      N2     a           7
+#> 1      N2     a          10
 #> 2      N2     a          10
-#> 3      N2     b           7
-#> 4      N2     b           9
-#> 5      N2     b          10
-#> 6     CB1     a           8
+#> 3      N2     b          10
+#> 4      N2     b           5
+#> 5      N2     b           5
+#> 6     CB1     a           9
 #> 7     CB1     a           8
-#> 8     CB1     a          10
-#> 9     CB1     a           7
-#> 10    CB1     b           9
-#> 11    CB1     b           5
-#> 12    CB1     b           6
+#> 8     CB1     a           6
+#> 9     CB1     a           8
+#> 10    CB1     b           5
+#> 11    CB1     b           7
+#> 12    CB1     b           7
 ```
 
 Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
@@ -76,12 +80,12 @@ Use distransam to get a new, randomly sampled dataframe where N's are equal for 
 ``` r
 distransam(worm_data, 'strain', 'plate')
 #>   strain plate measurement
-#> 1    CB1     a           8
-#> 2    CB1     a           7
-#> 3    CB1     b           5
-#> 4    CB1     b           9
-#> 5     N2     a           7
+#> 1    CB1     a           6
+#> 2    CB1     a           8
+#> 3    CB1     b           7
+#> 4    CB1     b           7
+#> 5     N2     a          10
 #> 6     N2     a          10
-#> 7     N2     b           7
-#> 8     N2     b          10
+#> 7     N2     b           5
+#> 8     N2     b           5
 ```
