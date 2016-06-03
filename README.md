@@ -2,6 +2,8 @@
 code is a work in process - which is not yet working correctly
 --------------------------------------------------------------
 
+[![Build Status](https://travis-ci.org/ttimbers/distransam.svg?branch=master)](https://travis-ci.org/ttimbers/distransam)
+
 ### distransam
 
 Randomly samples groups to get equal N's. Takes a data frame, and returns one with equal N's for each group. For unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly selects that number of samples from each group. A single sub-groups can be specified, as can a maximum N value. The returned object is a dataframe, with all the same original columns as the original data frame.
@@ -38,17 +40,17 @@ library(distransam)
 #>     intersect, setdiff, setequal, union
 library(dplyr)
 distransam(gap92, 'continent')
-#>                  country continent year lifeExp       pop  gdpPercap
-#> 1                 Uganda    Africa 1992  48.825  18252190   644.1708
-#> 2  Sao Tome and Principe    Africa 1992  62.742    125911  1428.7778
-#> 3                Bolivia  Americas 1992  59.957   6893451  2961.6997
-#> 4                  Haiti  Americas 1992  55.089   6326682  1456.3095
-#> 5               Pakistan      Asia 1992  60.838 120065004  1971.8295
-#> 6               Cambodia      Asia 1992  55.803  10150094   682.3032
-#> 7                 Norway    Europe 1992  77.320   4286357 33965.6611
-#> 8             Montenegro    Europe 1992  75.435    621621  7003.3390
-#> 9              Australia   Oceania 1992  77.560  17481977 23424.7668
-#> 10           New Zealand   Oceania 1992  76.330   3437674 18363.3249
+#>             country continent year lifeExp       pop  gdpPercap
+#> 1              Mali    Africa 1992  48.388   8416215   739.0144
+#> 2            Rwanda    Africa 1992  23.599   7290203   737.0686
+#> 3            Mexico  Americas 1992  71.455  88111030  9472.3843
+#> 4     United States  Americas 1992  76.090 256894189 32003.9322
+#> 5          Malaysia      Asia 1992  70.693  18319502  7277.9128
+#> 6  Hong Kong, China      Asia 1992  77.601   5829696 24757.6030
+#> 7           Belgium    Europe 1992  76.460  10045622 25575.5707
+#> 8           Germany    Europe 1992  76.070  80597764 26505.3032
+#> 9       New Zealand   Oceania 1992  76.330   3437674 18363.3249
+#> 10        Australia   Oceania 1992  77.560  17481977 23424.7668
 ```
 
 Another example of where this could be used, is if you had two groupings that you wanted equal random samples from, for example, if you want random samples of equal size from each plate for each strain
@@ -62,17 +64,17 @@ colnames(worm_data) <- c('strain', 'plate', 'measurement')
 worm_data
 #>    strain plate measurement
 #> 1      N2     a          10
-#> 2      N2     a          10
+#> 2      N2     a           8
 #> 3      N2     b          10
-#> 4      N2     b           5
-#> 5      N2     b           5
-#> 6     CB1     a           9
-#> 7     CB1     a           8
-#> 8     CB1     a           6
-#> 9     CB1     a           8
-#> 10    CB1     b           5
+#> 4      N2     b           8
+#> 5      N2     b          10
+#> 6     CB1     a           8
+#> 7     CB1     a           9
+#> 8     CB1     a           7
+#> 9     CB1     a           9
+#> 10    CB1     b           8
 #> 11    CB1     b           7
-#> 12    CB1     b           7
+#> 12    CB1     b          10
 ```
 
 Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
@@ -80,12 +82,12 @@ Use distransam to get a new, randomly sampled dataframe where N's are equal for 
 ``` r
 distransam(worm_data, 'strain', 'plate')
 #>   strain plate measurement
-#> 1    CB1     a           6
+#> 1    CB1     a           9
 #> 2    CB1     a           8
 #> 3    CB1     b           7
-#> 4    CB1     b           7
-#> 5     N2     a          10
+#> 4    CB1     b           8
+#> 5     N2     a           8
 #> 6     N2     a          10
-#> 7     N2     b           5
-#> 8     N2     b           5
+#> 7     N2     b          10
+#> 8     N2     b          10
 ```
