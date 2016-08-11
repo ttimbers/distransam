@@ -2,13 +2,6 @@ context("distransam")
 library(dplyr)
 library(purrr)
 
-# Determine if range of vector is FP 0. (borrowed from Hadley Wickam - http://stackoverflow.com/questions/4752275/test-for-equality-among-all-elements-of-a-single-vector)
-zero_range <- function(x, tol = .Machine$double.eps ^ 0.5) {
-  if (length(x) == 1) return(TRUE)
-  x <- range(x) / mean(x)
-  isTRUE(all.equal(x[1], x[2], tolerance = tol))
-}
-
 # create test data
 group <- c(rep('Drug1', 28), rep('Drug2', 46))
 site <- c(rep('Site1', 10), rep('Site2', 12), rep('Site3', 6), rep('Site4', 12), rep('Site5', 12), rep('Site6', 10), rep('Site7', 12))
