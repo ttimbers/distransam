@@ -4,14 +4,10 @@
 \alias{distransam_series}
 \title{Randomly samples groups that have series data to get equal N's}
 \usage{
-distransam_series(x, grouping_var, subgroup_var = NULL, series_var)
+distransam_series(x, group, site, ID, series)
 }
 \arguments{
-\item{x}{}
-
-\item{grouping_var}{}
-
-\item{series_var}{}
+\item{series}{}
 }
 \value{
 dataframe
@@ -20,6 +16,6 @@ dataframe
 Randomly samples groups that have series data to get equal N's
 }
 \examples{
-
+distransam_series(worm_data_time_series, 'strain', 'plate', 'ID', 'time')
 }
 
