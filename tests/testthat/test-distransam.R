@@ -73,6 +73,31 @@ exp_data
 # run distransam function on test data
 evenly_sampled_data <- distransam(test_data)
 
+# calculate id counts for use in tests
+# counts for expected data
+data_counts_exp <- exp_data %>%
+group_by(group) %>%
+  count(plate, id) %>% 
+  group_by(group, plate) %>% 
+  summarise(count = n())
+# counts for test data set generated via distransam
+data_counts_evenly_sampled <- evenly_sampled_data %>%
+  group_by(group) %>%
+  count(plate, id) %>%
+  group_by(group, plate) %>%
+  summarise(count = n())
+
+# calculate plate counts for use in tests
+# test expected data set (generated manually)
+plate_counts_exp <- data_counts_exp %>%
+  group_by(group) %>%
+  summarise(count = n())
+# test data set generated via distransam
+plate_counts_evenly_sampled <- data_counts_evenly_sampled %>%
+  group_by(group) %>%
+  summarise(count = n())
+
+
 # run tests to ensure distransam function works correctly
 test_that("randomly_sampled_dataframe is the same width and types as input data frame", {
   # test expected data set (generated manually)
@@ -84,48 +109,53 @@ test_that("randomly_sampled_dataframe is the same width and types as input data 
 
 test_that("N (id's) for each plate should be equal in randomly_sampled_dataframe",{
   # test expected data set (generated manually)
-  data_counts_exp <- exp_data %>%
-    group_by(group) %>%
-    count(plate, id) %>% 
-    group_by(group, plate) %>% 
-    summarise(count = n())
-    
   zero_range(data_counts_exp$count)
   
   # test data set generated via distransam
-  data_counts_evenly_sampled <- evenly_sampled_data %>%
-    group_by(group) %>%
-    count(plate, id) %>%
-    group_by(group, plate) %>%
-    summarise(count = n())
-
   zero_range(data_counts_evenly_sampled$count)
 })
 
 test_that("N for each Plate should be equal in randomly_sampled_dataframe", {
-  evenly_sampled_sample_counts <- unlist(evenly_sampled_data %>% split(.$Plate)  %>% map(~ length(unique(.$sample))))
-  zero_range(evenly_sampled_sample_counts)
+  # test expected data set (generated manually)
+  zero_range(plate_counts_exp$count)
+  
+  # test data set generated via distransam
+  zero_range(plate_counts_evenly_sampled$count)
 })
 
 test_that("N Plates per group must be equal to the minimum number of Plates in the smallest group", {
-  test_data_Plate_counts <- unlist(test_data %>%
-                                     split(.$group) %>%
-                                     map(~ length(unique(.$Plate))))
-
-  evenly_sampled_Plate_counts <- unlist(evenly_sampled_data %>%
-                                          split(.$group) %>%
-                                          map(~ length(unique(.$Plate))))
-
-  all(min(test_data_Plate_counts) == evenly_sampled_Plate_counts)
+  # get min plate per group/strain
+  min_plate_test_data <- test_data %>%
+    group_by(group) %>%
+    count(plate, id) %>% 
+    group_by(group, plate) %>% 
+    summarise(count = n()) %>% 
+    group_by(group) %>%
+    summarise(count = n()) %>% 
+    select(count) %>% 
+    min()
+  
+  # test expected data set (generated manually)
+  all(min_plate_test_data == plate_counts_exp$count)
+  
+  # test data set generated via distransam
+  all(min_plate_test_data == plate_counts_evenly_sampled$count)
 })
 
 test_that("N for samples per Plate must be equal to the minimum number of samples in the smallest Plate", {
-  test_data_sample_counts <- unlist(test_data %>% split(.$Plate)  %>%
-                                      map(~ length(unique(.$sample))))
-
-  evenly_sampled_sample_counts <- unlist(evenly_sampled_data %>%
-                                           split(.$Plate)  %>%
-                                           map(~ length(unique(.$sample))))
-
-  all(min(test_data_sample_counts) == evenly_sampled_sample_counts)
+  # get min id per plate
+  min_ids_test_data <- test_data %>%
+    group_by(group) %>%
+    count(plate, id) %>% 
+    group_by(group, plate) %>% 
+    summarise(count = n()) %>% 
+    ungroup() %>% 
+    select(count) %>% 
+    min()
+  
+  # test expected data set (generated manually)
+  all(min_ids_test_data == data_counts_exp$count)
+  
+  # test data set generated via distransam
+  all(min_ids_test_data == plate_counts_evenly_sampled$count)
 })
