@@ -18,9 +18,15 @@
 #'
 #' @examples
 #' work in progress
-distransam <- function(x, grouping_var, sample_var = NULL, max_N = NULL){
+distransam <- function(x, grouping_var, site_var, sample_var){
+
+  # query how many sites per group, and if not equal, randomly select them from each group to make them equal to
+  # the number of sites in the smallest group
 
 
+
+  # query how many samples per site, and if not equal, randomly select them from each site to make them equal to
+  # the number of samples in the smallest site
 
   return(randomly_sampled_dataframe)
 }
