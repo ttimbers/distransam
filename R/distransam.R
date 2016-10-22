@@ -50,6 +50,7 @@ distransam <- function(x, grouping_var, site_var, sample_var){
                "Min N of samples per plate", 
                "Min N of plates per strain"), 
              value = c(strain_n, min_n_id_per_plate, min_n_plates_per_strain))
+  print(count_summary)
   
   # randomly select min_n_plates from each strain
   randomly_sampled_dataframe <- x %>% 
@@ -73,6 +74,3 @@ distransam <- function(x, grouping_var, site_var, sample_var){
   # return data frame
   return(randomly_sampled_dataframe)
 }
-
-
-
