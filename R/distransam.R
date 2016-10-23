@@ -17,6 +17,7 @@
 #' @param sample_var string
 #'
 #' @return dataframe
+#' @export
 #'
 #' @examples
 #'
