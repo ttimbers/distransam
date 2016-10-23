@@ -5,7 +5,11 @@
 
 ### distransam
 
-Randomly samples groups to get equal N's. Takes a data frame, and returns one with equal N's for each group. For unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly selects that number of samples from each group. A single sub-groups can be specified, as can a maximum N value. The returned object is a dataframe, with all the same original columns as the original data frame.
+Randomly samples a time series groups and plates/sites to get equal N's for both plates/sites and samples from each group
+
+Takes a data frame containing a time series, a column name for the grouping variable, a column name for the plates/sites variable, and a column name for the sample id's. Returns one with equal N's for both plates/sites and samples from each group.
+
+For unequal site numbers, it finds the minimum site number from the smallest group, and randomly selects that number of sites from each group. For unequal sample sizes between sites, it finds the minimum sample size from the smallest site, and randomly selects that number of samples from each group. The returned object is a dataframe, with all the same columns as the original data frame.
 
 note - that because this package uses dplyr & `%>%` both distransam & dplyr libraries must be loaded
 
@@ -54,12 +58,12 @@ measurement <- c(rnorm(28, mean = 5, sd = 0.5),
 test_data <- data.frame(group, plate, id, time, measurement)
 head(test_data)
 #>     group  plate id time measurement
-#> 1 Strain1 Plate1  1    1    4.692333
-#> 2 Strain1 Plate1  1    2    4.535664
-#> 3 Strain1 Plate1  1    3    4.988564
-#> 4 Strain1 Plate1  1    4    4.010976
-#> 5 Strain1 Plate1  1    5    5.093336
-#> 6 Strain1 Plate1  2    1    5.516185
+#> 1 Strain1 Plate1  1    1    4.653315
+#> 2 Strain1 Plate1  1    2    5.635409
+#> 3 Strain1 Plate1  1    3    4.573239
+#> 4 Strain1 Plate1  1    4    4.811544
+#> 5 Strain1 Plate1  1    5    4.712574
+#> 6 Strain1 Plate1  2    1    4.657307
 ```
 
 Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
@@ -99,15 +103,15 @@ str(test_data)
 #>  $ plate      : Factor w/ 7 levels "Plate1","Plate2",..: 1 1 1 1 1 1 1 1 1 1 ...
 #>  $ id         : num  1 1 1 1 1 2 2 2 2 2 ...
 #>  $ time       : int  1 2 3 4 5 1 2 3 4 5 ...
-#>  $ measurement: num  4.69 4.54 4.99 4.01 5.09 ...
+#>  $ measurement: num  4.65 5.64 4.57 4.81 4.71 ...
 ```
 
 ``` r
 str(sampled_test_data)
 #> Classes 'tbl_df', 'tbl' and 'data.frame':    50 obs. of  5 variables:
 #>  $ group      : Factor w/ 2 levels "Strain1","Strain2": 1 1 1 1 1 1 1 1 1 1 ...
-#>  $ plate      : Factor w/ 7 levels "Plate1","Plate2",..: 2 2 2 2 2 2 2 2 1 1 ...
-#>  $ id         : num  3 3 3 3 1 1 1 1 2 2 ...
+#>  $ plate      : Factor w/ 7 levels "Plate1","Plate2",..: 2 2 2 2 2 2 2 2 3 3 ...
+#>  $ id         : num  2 2 2 2 1 1 1 1 1 1 ...
 #>  $ time       : int  1 2 3 4 1 2 3 4 1 2 ...
-#>  $ measurement: num  4.98 4.83 4.45 5.51 5.64 ...
+#>  $ measurement: num  4.42 5.56 5.16 4.36 4.74 ...
 ```
