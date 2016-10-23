@@ -51,6 +51,7 @@ distransam <- function(x, grouping_var, plate_var, sample_var){
     dplyr::select(count) %>%
     min()
 
+  # this will eventually become it's own function, or will be returned instead of printed...
   count_summary <- data.frame(stat = c("Number of Strains",
                "Min N of samples per plate",
                "Min N of plates per strain"),
@@ -61,10 +62,8 @@ distransam <- function(x, grouping_var, plate_var, sample_var){
   randomly_sampled_dataframe <- x %>%
     dplyr::group_by_(grouping_var, plate_var, sample_var) %>%
     tidyr::nest(.key = id_data) %>%
-    dplyr::ungroup() %>%
     dplyr::group_by_(grouping_var, plate_var) %>%
     tidyr::nest(.key = plate_data) %>%
-    dplyr::ungroup() %>%
     dplyr::group_by_(grouping_var) %>%
     tidyr::nest(.key = strain_data) %>%
     dplyr::mutate(samp = map2(strain_data, min_n_plates_per_strain, sample_n)) %>%
@@ -76,6 +75,6 @@ distransam <- function(x, grouping_var, plate_var, sample_var){
     tidyr::unnest() %>%
     tidyr::unnest()
 
-  # return data frame
+  # return randomly sampled data frame with equal N's for plates and samples
   return(randomly_sampled_dataframe)
 }
