@@ -72,21 +72,21 @@ head(test_data)
 
 Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
 
-```{r, eval = FALSE}
+```{r}
 library(dplyr)
 library(purrr)
 library(tidyr)
 library(distransam)
 
-sampled_test_data <- distransam(worm_data, 'group', 'plate', 'id')
+sampled_test_data <- distransam(test_data, 'group', 'plate', 'id')
 ```
 
 Compare `test_data` to `sampled_test_data`:
 
-```{r, eval = FALSE}
+```{r}
 str(test_data)
 ```
 
-```{r, eval = FALSE}
+```{r}
 str(sampled_test_data)
 ```
