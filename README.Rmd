@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-## code is a work in process - which is not yet working correctly
+*note - code is working as exptected (all `testthat` tests pass), but there are some issues with the documentation/library dependencies in the code, causing the build to fail...*
 
 [![Build Status](https://travis-ci.org/ttimbers/distransam.svg?branch=master)](https://travis-ci.org/ttimbers/distransam)
 

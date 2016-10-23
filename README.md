@@ -1,6 +1,5 @@
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-code is a work in process - which is not yet working correctly
---------------------------------------------------------------
+*note - code is working as exptected (all `testthat` tests pass), but there are some issues with the documentation/library dependencies in the code, causing the build to fail...*
 
 [![Build Status](https://travis-ci.org/ttimbers/distransam.svg?branch=master)](https://travis-ci.org/ttimbers/distransam)
 
@@ -55,12 +54,12 @@ measurement <- c(rnorm(28, mean = 5, sd = 0.5),
 test_data <- data.frame(group, plate, id, time, measurement)
 head(test_data)
 #>     group  plate id time measurement
-#> 1 Strain1 Plate1  1    1    4.737689
-#> 2 Strain1 Plate1  1    2    5.545522
-#> 3 Strain1 Plate1  1    3    5.350639
-#> 4 Strain1 Plate1  1    4    4.432158
-#> 5 Strain1 Plate1  1    5    5.255431
-#> 6 Strain1 Plate1  2    1    4.639685
+#> 1 Strain1 Plate1  1    1    4.692333
+#> 2 Strain1 Plate1  1    2    4.535664
+#> 3 Strain1 Plate1  1    3    4.988564
+#> 4 Strain1 Plate1  1    4    4.010976
+#> 5 Strain1 Plate1  1    5    5.093336
+#> 6 Strain1 Plate1  2    1    5.516185
 ```
 
 Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
@@ -100,15 +99,15 @@ str(test_data)
 #>  $ plate      : Factor w/ 7 levels "Plate1","Plate2",..: 1 1 1 1 1 1 1 1 1 1 ...
 #>  $ id         : num  1 1 1 1 1 2 2 2 2 2 ...
 #>  $ time       : int  1 2 3 4 5 1 2 3 4 5 ...
-#>  $ measurement: num  4.74 5.55 5.35 4.43 5.26 ...
+#>  $ measurement: num  4.69 4.54 4.99 4.01 5.09 ...
 ```
 
 ``` r
 str(sampled_test_data)
-#> Classes 'tbl_df', 'tbl' and 'data.frame':    48 obs. of  5 variables:
+#> Classes 'tbl_df', 'tbl' and 'data.frame':    50 obs. of  5 variables:
 #>  $ group      : Factor w/ 2 levels "Strain1","Strain2": 1 1 1 1 1 1 1 1 1 1 ...
-#>  $ plate      : Factor w/ 7 levels "Plate1","Plate2",..: 2 2 2 2 2 2 2 2 3 3 ...
-#>  $ id         : num  2 2 2 2 3 3 3 3 1 1 ...
+#>  $ plate      : Factor w/ 7 levels "Plate1","Plate2",..: 2 2 2 2 2 2 2 2 1 1 ...
+#>  $ id         : num  3 3 3 3 1 1 1 1 2 2 ...
 #>  $ time       : int  1 2 3 4 1 2 3 4 1 2 ...
-#>  $ measurement: num  6.25 5.83 4.54 4.79 5.06 ...
+#>  $ measurement: num  4.98 4.83 4.45 5.51 5.64 ...
 ```
