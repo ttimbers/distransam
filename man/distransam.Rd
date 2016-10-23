@@ -4,29 +4,50 @@
 \name{distransam}
 \alias{distransam}
 \alias{distransam-package}
-\title{distransam: randomly samples groups to get equal N's}
+\title{distransam.}
 \usage{
-distransam(x, grouping_var, sample_var = NULL, max_N = NULL)
+distransam(x, grouping_var, plate_var, sample_var)
 }
 \arguments{
 \item{x}{dataframe}
 
 \item{grouping_var}{string}
 
-\item{sample_var}{string (optional)}
+\item{plate_var}{string}
 
-\item{max_N}{integer (not yet implemented)}
+\item{sample_var}{string}
 }
 \value{
 dataframe
 }
 \description{
-Takes a data frame, and returns one with equal N's for each group. For unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly selects that number of samples from each group. A single sub-groups can be specified, as can a maximum N value. The returned object is a dataframe, with all the same original columns as the original data frame.
+#' Randomly samples a time series groups and plates/sites to get equal N's for both
+plates/sites and samples from each group
 
-Takes a data frame, and returns one with equal N's for each group. For unequal sample sizes, it finds the minimum sample size from the smallest group, and randomly selects that number of samples from each group. A single sub-groups can be specified, as can a maximum N value. The returned object is a dataframe, with all the same original columns as the original data frame.
+Takes a data frame containing a time series, a column name for the grouping variable,
+a column name for the plates/sites variable, and a column name for the sample id's.
+Returns one with equal N's for both plates/sites and samples from each group.
+}
+\details{
+Takes a data frame containing a time series, a column name for the grouping variable,
+a column name for the plates/sites variable, and a column name for the sample id's.
+Returns one with equal N's for both plates/sites and samples from each group.
+
+For unequal site numbers, it finds the minimum site number from the smallest group,
+and randomly selects that number of sites from each group. For unequal sample sizes
+between sites, it finds the minimum sample size from the smallest site, and randomly
+selects that number of samples from each group. The returned object is a dataframe,
+with all the same columns as the original data frame.
+
+For unequal site numbers, it finds the minimum site number from the smallest group,
+and randomly selects that number of sites from each group. For unequal sample sizes
+between sites, it finds the minimum sample size from the smallest site, and randomly
+selects that number of samples from each group. The returned object is a dataframe,
+with all the same columns as the original data frame.
 }
 \examples{
-library(gapminder)
-distransam(gapminder[gapminder$year == 1992,], 'continent')
+
+# distransam(data_frame, "strain", "plate", "id")
+
 }
 

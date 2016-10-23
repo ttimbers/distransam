@@ -18,76 +18,68 @@ devtools::install_github("ttimbers/distransam")
 
 ### Quick demo
 
-Using a subset of the gapminder dataset
+Create some data:
 
 ``` r
-library(gapminder)
-gap92 <- gapminder[gapminder$year == 1992,]
-```
+# create test data
+group <- c(rep('Strain1', 28),
+           rep('Strain2', 46))
 
-Lets randomly sample the gap92 dataframe for countries from each continent, but in doing so, ensure that we get an equal sample size for each continent.
+plate <- c(rep('Plate1', 10),
+           rep('Plate2', 12),
+           rep('Plate3', 6),
+           rep('Plate4', 12),
+           rep('Plate5', 12),
+           rep('Plate6', 10),
+           rep('Plate7', 12))
 
-``` r
-library(distransam)
-#> Loading required package: dplyr
-#> 
-#> Attaching package: 'dplyr'
-#> The following objects are masked from 'package:stats':
-#> 
-#>     filter, lag
-#> The following objects are masked from 'package:base':
-#> 
-#>     intersect, setdiff, setequal, union
-library(dplyr)
-distransam(gap92, 'continent')
-#>             country continent year lifeExp       pop  gdpPercap
-#> 1              Mali    Africa 1992  48.388   8416215   739.0144
-#> 2            Rwanda    Africa 1992  23.599   7290203   737.0686
-#> 3            Mexico  Americas 1992  71.455  88111030  9472.3843
-#> 4     United States  Americas 1992  76.090 256894189 32003.9322
-#> 5          Malaysia      Asia 1992  70.693  18319502  7277.9128
-#> 6  Hong Kong, China      Asia 1992  77.601   5829696 24757.6030
-#> 7           Belgium    Europe 1992  76.460  10045622 25575.5707
-#> 8           Germany    Europe 1992  76.070  80597764 26505.3032
-#> 9       New Zealand   Oceania 1992  76.330   3437674 18363.3249
-#> 10        Australia   Oceania 1992  77.560  17481977 23424.7668
-```
+id <- c(rep(1, 5), rep(2, 5),
+        rep(1, 4), rep(2, 4), rep(3, 4),
+        rep(1, 3), rep(2, 3),
+        rep(1, 4), rep(2, 4), rep(3, 4),
+        rep(1, 4), rep(2, 4), rep(3, 4),
+        rep(1, 5), rep(2, 5),
+        rep(1, 4), rep(2, 4), rep(3, 4))
 
-Another example of where this could be used, is if you had two groupings that you wanted equal random samples from, for example, if you want random samples of equal size from each plate for each strain
+time <- c(rep(seq(1:5), 2),
+          rep(seq(1:4), 3),
+          rep(seq(1:3), 2),
+          rep(seq(1:4), 3),
+          rep(seq(1:4), 3),
+          rep(seq(1:5), 2),
+          rep(seq(1:4), 3))
 
-``` r
-# make a data frame with worm strain, Petri plate ID, and a measurement
-worm_data <- data.frame(c(rep("N2", 5), rep("CB1", 7)), c(rep('a', 2), rep('b', 3), rep('a', 4), rep('b',3)), sample(5:10, 12, replace = TRUE))
-colnames(worm_data) <- c('strain', 'plate', 'measurement')
+measurement <- c(rnorm(28, mean = 5, sd = 0.5),
+                 rnorm(46, mean = 6.5, sd = 0.5))
 
-#view data frame
-worm_data
-#>    strain plate measurement
-#> 1      N2     a          10
-#> 2      N2     a           8
-#> 3      N2     b          10
-#> 4      N2     b           8
-#> 5      N2     b          10
-#> 6     CB1     a           8
-#> 7     CB1     a           9
-#> 8     CB1     a           7
-#> 9     CB1     a           9
-#> 10    CB1     b           8
-#> 11    CB1     b           7
-#> 12    CB1     b          10
+test_data <- data.frame(group, plate, id, time, measurement)
+head(test_data)
+#>     group  plate id time measurement
+#> 1 Strain1 Plate1  1    1    4.752098
+#> 2 Strain1 Plate1  1    2    5.123247
+#> 3 Strain1 Plate1  1    3    5.094555
+#> 4 Strain1 Plate1  1    4    4.868570
+#> 5 Strain1 Plate1  1    5    5.737470
+#> 6 Strain1 Plate1  2    1    4.946963
 ```
 
 Use distransam to get a new, randomly sampled dataframe where N's are equal for each plate, and strain:
 
 ``` r
-distransam(worm_data, 'strain', 'plate')
-#>   strain plate measurement
-#> 1    CB1     a           9
-#> 2    CB1     a           8
-#> 3    CB1     b           7
-#> 4    CB1     b           8
-#> 5     N2     a           8
-#> 6     N2     a          10
-#> 7     N2     b          10
-#> 8     N2     b          10
+library(dplyr)
+library(purrr)
+library(tidyr)
+library(distransam)
+
+sampled_test_data <- distransam(worm_data, 'group', 'plate', 'id')
+```
+
+Compare `test_data` to `sampled_test_data`:
+
+``` r
+str(test_data)
+```
+
+``` r
+str(sampled_test_data)
 ```
